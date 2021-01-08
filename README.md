@@ -20,9 +20,7 @@ Require this package in the `composer.json` of your laravel project. This will d
 composer require archytech/laramix
 ```
 
-The `Archytech\Laravel\Ifx\InformixServiceProvider` is **auto-discovered** and registered by **default**.
-
-Once Composer has installed or updated your packages you need to register Informix DB. Open up `config/app.php` and find
+Once Composer has installed or updated, you need to register Informix Driver. Open up `config/app.php` and find
 the `providers` key and add:
 
 ```php
@@ -37,7 +35,7 @@ the `providers` key and add:
 Finally you need to publish a configuration file by running the following artisan command.
 
 ```bash
-php artisan vendor:publish --provider="Archytech\Laravel\Ifx\InformixServiceProvider" --tag=config
+php artisan vendor:publish
 ```
 
 This will copy the configuration file to `config/informix.php`
