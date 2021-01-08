@@ -6,11 +6,11 @@
 
 - php: `^7.2`
 - laravel/framework: `^6.0|^7.0`
+- guzzlehttp/guzzle: `^6.0|^7.0`
 - illuminate/support: `^6.0|^7.0`
 - illuminate/database: `^6.0|^7.0`
 - illuminate/pagination: `^6.0|^7.0`
 - illuminate/encryption: `^6.0|^7.0`
-- guzzlehttp/guzzle: `^6.0|^7.0`
 
 ## Installation
 
@@ -20,8 +20,7 @@ Require this package in the `composer.json` of your laravel project. This will d
 composer require archytech/laramix
 ```
 
-Once Composer has installed or updated, you need to register Informix Driver. Open up `config/app.php` and find
-the `providers` key and add:
+Once Composer has installed or updated, you need to register Informix Driver. Open up `config/app.php` and find the `providers` key and add:
 
 ```php
 'providers' => [
@@ -35,7 +34,7 @@ the `providers` key and add:
 Finally you need to publish a configuration file by running the following artisan command.
 
 ```bash
-php artisan vendor:publish
+php artisan vendor:publish --provider="Archytech\Laravel\Ifx\InformixServiceProvider"
 ```
 
 This will copy the configuration file to `config/informix.php`
