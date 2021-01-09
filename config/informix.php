@@ -9,13 +9,13 @@ return [
         'password'        => env('DB_IFX_PASSWORD', ''),
         'service'         => env('DB_IFX_SERVICE', '11143'),
         'server'          => env('DB_IFX_SERVER', 'ol_informix'),
-        'db_locale'       => 'en_US.819',
-        'client_locale'   => 'en_US.819',
-        'db_encoding'     => 'GBK',
+        'db_locale'       => 'en_US.utf8',
+        'client_locale'   => 'en_US.utf8',
+        'client_encoding' => 'UTF-8',
+        'db_encoding'     => 'UTF-8',
+        'protocol'        => 'onsoctcp',
         'initSqls'        => false,
         'enable_scroll'   => 1,
-        'protocol'        => 'onsoctcp',
-        'client_encoding' => 'UTF-8',
         'prefix'          => ''
     ],
 
