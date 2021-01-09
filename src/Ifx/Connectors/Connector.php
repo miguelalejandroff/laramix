@@ -78,24 +78,24 @@ class Connector extends BaseConnector implements ConnectorInterface
     {
         $dsn = $this->getDsn($config);
 
-        $options = $this->getOptions($config);
+        $opt = $this->getOptions($config);
 
         /*
          * We need to grab the PDO options that should be used while making the brand
          * new connection instance. The PDO options control various aspects of the
-         * connection'tests behavior, and some might be specified by the developers.
+         * connection tests behavior, and some might be specified by the developers.
          */
-        $connection = $this->createConnection($dsn, $config, $options);
+        $conn = $this->createConnection($dsn, $config, $opt);
 
         if (Arr::get($config, 'initSqls', false)) {
             if(is_string($config['initSqls']))
-                $connection->exec($config['initSqls']);
+                $conn->exec($config['initSqls']);
             if(is_array($config['initSqls'])){
-                $connection->exec( implode('; ', $config['initSqls']) );
+                $conn->exec( implode('; ', $config['initSqls']) );
             }
         }
 
-        return $connection;
+        return $conn;
     }
 
     /**
