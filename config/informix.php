@@ -15,8 +15,13 @@ return [
         'db_encoding'     => 'UTF-8',
         'protocol'        => 'onsoctcp',
         'initSqls'        => false,
+        'prefix'          => '',
         'enable_scroll'   => 1,
-        'prefix'          => ''
+        'options'         => [
+            PDO::ATTR_PERSISTENT => true,
+            PDO::ATTR_CASE       => PDO::CASE_NATURAL,
+            PDO::ATTR_ERRMODE    => PDO::ERRMODE_EXCEPTION,
+        ]
     ],
 
     'informix-source-json' => [
