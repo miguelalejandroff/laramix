@@ -11,7 +11,8 @@ class Grammar extends QueryGrammar
      * Compile the "limit" portions of the query.
      *
      * @param Builder $query
-     * @param int $limit
+     * @param int     $limit
+     *
      * @return string
      */
     protected function compileLimit(Builder $query, $limit)
@@ -23,7 +24,8 @@ class Grammar extends QueryGrammar
      * Compile the "offset" portions of the query.
      *
      * @param Builder $query
-     * @param int $offset
+     * @param int     $offset
+     *
      * @return string
      */
     protected function compileOffset(Builder $query, $offset)
@@ -35,7 +37,8 @@ class Grammar extends QueryGrammar
      * Compile the "select *" portion of the query.
      *
      * @param Builder $query
-     * @param array $columns
+     * @param array   $columns
+     *
      * @return string|void|null
      */
     protected function compileColumns(Builder $query, $columns)
@@ -45,18 +48,18 @@ class Grammar extends QueryGrammar
          * compiler handle the building of the select clauses, as it will need some
          * more syntax that is best handled by that function to keep things neat.
          */
-        if (! is_null($query->aggregate)) {
+        if (!is_null($query->aggregate)) {
             return;
         }
 
         $select = 'select';
 
         if ($query->offset > 0) {
-            $select.=' skip '. (int)$query->offset;
+            $select .= ' skip '.(int) $query->offset;
         }
 
         if ($query->limit > 0) {
-            $select.= ' first '.(int)$query->limit;
+            $select .= ' first '.(int) $query->limit;
         }
 
         $select .= $query->distinct ? ' distinct' : '';
@@ -67,8 +70,9 @@ class Grammar extends QueryGrammar
     /**
      * Compile the lock into SQL.
      *
-     * @param Builder $query
+     * @param Builder     $query
      * @param bool|string $value
+     *
      * @return bool|string
      */
     protected function compileLock(Builder $query, $value)
@@ -84,6 +88,7 @@ class Grammar extends QueryGrammar
      * Wrapping SQL value.
      *
      * @param string $value
+     *
      * @return mixed|string
      */
     protected function wrapValue($value)
@@ -99,6 +104,7 @@ class Grammar extends QueryGrammar
      * Compile a select query into SQL.
      *
      * @param Builder $query
+     *
      * @return string
      */
     public function compileSelect(Builder $query)
@@ -108,8 +114,8 @@ class Grammar extends QueryGrammar
         }
 
         $components = $this->compileComponents($query);
-        if(key_exists("lock", $components)){
-            unset($components["orders"]);
+        if (key_exists('lock', $components)) {
+            unset($components['orders']);
         }
 
         return trim($this->concatenate($components));
@@ -119,6 +125,7 @@ class Grammar extends QueryGrammar
      * Compile the "union" queries attached to the main query.
      *
      * @param Builder $query
+     *
      * @return string
      */
     protected function compileUnions(Builder $query)
@@ -139,6 +146,7 @@ class Grammar extends QueryGrammar
      * Compile an exists statement into SQL.
      *
      * @param Builder $query
+     *
      * @return string
      */
     public function compileExists(Builder $query)
@@ -153,7 +161,8 @@ class Grammar extends QueryGrammar
      * Compile an insert statement into SQL.
      *
      * @param Builder $query
-     * @param array $values
+     * @param array   $values
+     *
      * @return string
      */
     public function compileInsert(Builder $query, array $values)
@@ -165,7 +174,7 @@ class Grammar extends QueryGrammar
          */
         $table = $this->wrapTable($query->from);
 
-        if (! is_array(reset($values))) {
+        if (!is_array(reset($values))) {
             $values = [$values];
         }
 
@@ -189,6 +198,7 @@ class Grammar extends QueryGrammar
      *
      * @param Builder $query
      * @param $where
+     *
      * @return string
      */
     protected function whereBitand(Builder $query, $where)
@@ -198,5 +208,4 @@ class Grammar extends QueryGrammar
 
         return $bitand.'('.$this->wrap($where['column']).', '.$this->wrapValue($values[0]).' ) '.$where['operator'].' '.$this->wrapValue($values[1]);
     }
-
 }

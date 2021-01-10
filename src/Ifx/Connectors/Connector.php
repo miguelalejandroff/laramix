@@ -2,13 +2,13 @@
 
 namespace Archytech\Laravel\Ifx\Connectors;
 
+use Exception;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Database\Connectors\Connector as BaseConnector;
 use Illuminate\Database\Connectors\ConnectorInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use PDO;
-use Exception;
 
 class Connector extends BaseConnector implements ConnectorInterface
 {
@@ -39,10 +39,12 @@ class Connector extends BaseConnector implements ConnectorInterface
      * Create Connection PDO.
      *
      * @param string $dsn
-     * @param array $config
-     * @param array $options
-     * @return PDO
+     * @param array  $config
+     * @param array  $options
+     *
      * @throws Exception
+     *
+     * @return PDO
      */
     public function createConnection($dsn, array $config, array $options)
     {
@@ -50,8 +52,8 @@ class Connector extends BaseConnector implements ConnectorInterface
 
         $password = Arr::get($config, 'password');
 
-        if($this->encrypter && strlen($password) > 50) {
-            if(Str::startsWith("base64:", $password)){
+        if ($this->encrypter && strlen($password) > 50) {
+            if (Str::startsWith('base64:', $password)) {
                 $password = $this->encrypter->decrypt(substr($password, 7));
             } else {
                 $password = $this->encrypter->decrypt($password);
@@ -62,7 +64,11 @@ class Connector extends BaseConnector implements ConnectorInterface
             $pdo = new PDO($dsn, $username, $password, $options);
         } catch (Exception $e) {
             $pdo = $this->tryAgainIfCausedByLostConnection(
-                $e, $dsn, $username, $password, $options
+                $e,
+                $dsn,
+                $username,
+                $password,
+                $options
             );
         }
 
@@ -71,8 +77,10 @@ class Connector extends BaseConnector implements ConnectorInterface
 
     /**
      * @param array $config
-     * @return PDO
+     *
      * @throws Exception
+     *
+     * @return PDO
      */
     public function connect(array $config)
     {
@@ -88,10 +96,11 @@ class Connector extends BaseConnector implements ConnectorInterface
         $connection = $this->createConnection($dsn, $config, $options);
 
         if (Arr::get($config, 'initSqls', false)) {
-            if(is_string($config['initSqls']))
+            if (is_string($config['initSqls'])) {
                 $connection->exec($config['initSqls']);
-            if(is_array($config['initSqls'])){
-                $connection->exec( implode('; ', $config['initSqls']) );
+            }
+            if (is_array($config['initSqls'])) {
+                $connection->exec(implode('; ', $config['initSqls']));
             }
         }
 
@@ -102,7 +111,8 @@ class Connector extends BaseConnector implements ConnectorInterface
      * Create a DSN string from a configuration.
      * Chooses socket or host/port based on the 'unix_socket' config value.
      *
-     * @param  array $config
+     * @param array $config
+     *
      * @return string
      */
     protected function getDsn(array $config)
@@ -114,17 +124,24 @@ class Connector extends BaseConnector implements ConnectorInterface
      * Create a DSN option string from a configuration.
      *
      * @param array $config
+     *
      * @return string
      */
     protected function getDsnOption(array $config)
     {
-        $options = "protocol=".Arr::get($config, "protocol", "onsoctcp").";";
+        $options = 'protocol='.Arr::get($config, 'protocol', 'onsoctcp').';';
 
-        if(isset($config['enable_scroll'])) $options.=" EnableScrollableCursors={$config['enable_scroll']};";
+        if (isset($config['enable_scroll'])) {
+            $options .= " EnableScrollableCursors={$config['enable_scroll']};";
+        }
 
-        if(isset($config['db_locale'])) $options.=" DB_LOCALE={$config['db_locale']};";
+        if (isset($config['db_locale'])) {
+            $options .= " DB_LOCALE={$config['db_locale']};";
+        }
 
-        if(isset($config['client_locale'])) $options.=" CLIENT_LOCALE={$config['client_locale']};";
+        if (isset($config['client_locale'])) {
+            $options .= " CLIENT_LOCALE={$config['client_locale']};";
+        }
 
         return $options;
     }
