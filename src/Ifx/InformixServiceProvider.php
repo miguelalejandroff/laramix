@@ -16,7 +16,6 @@ class InformixServiceProvider extends ServiceProvider
     public function register()
     {
         if (file_exists(config_path('informix.php'))) {
-
             $this->mergeConfigFrom(config_path('informix.php'), 'database.connections');
 
             $config = $this->app['config']->get('informix', []);
@@ -25,12 +24,13 @@ class InformixServiceProvider extends ServiceProvider
 
             foreach ($connection_keys as $key) {
                 $this->app['db']->extend($key, function ($config) {
-                    $driver = Arr::get($config, "driver", "informix");
-                    if($driver === "informix"){
+                    $driver = Arr::get($config, 'driver', 'informix');
+                    if ($driver === 'informix') {
                         $oConnector = new Connector($this->app['encrypter']);
                         $connection = $oConnector->connect($config);
+
                         return new Connection($connection, $config['database'], $config['prefix'], $config);
-                    } else if($driver === "informix-json") {
+                    } elseif ($driver === 'informix-json') {
                         return new JsonConnection($config);
                     }
                 });
@@ -51,7 +51,7 @@ class InformixServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get configuration file
+     * Get configuration file.
      *
      * @return string
      */
@@ -62,13 +62,14 @@ class InformixServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get root path of package
+     * Get root path of package.
      *
      * @param string $file
+     *
      * @return string
      */
     protected function getPathPackage($file = 'src')
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $file;
+        return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.$file;
     }
 }

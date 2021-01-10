@@ -16,7 +16,7 @@ return [
         'enable_scroll'   => 1,
         'protocol'        => 'onsoctcp',
         'client_encoding' => 'UTF-8',
-        'prefix'          => ''
+        'prefix'          => '',
     ],
 
     'informix-source-json' => [
