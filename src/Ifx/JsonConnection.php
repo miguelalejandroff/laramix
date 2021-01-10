@@ -22,7 +22,8 @@ class JsonConnection extends BaseConnection implements ConnectionInterface
     /**
      * Create a new database connection instance.
      *
-     * @param  array  $config
+     * @param array $config
+     *
      * @return void
      */
     public function __construct($config)
@@ -41,68 +42,69 @@ class JsonConnection extends BaseConnection implements ConnectionInterface
 
     public function table($table, $as = null)
     {
-        throw new Exception("the method is not implemented.");
+        throw new Exception('the method is not implemented.');
     }
 
     public function raw($value)
     {
-        throw new Exception("the method is not implemented.");
+        throw new Exception('the method is not implemented.');
     }
 
     public function selectOne($query, $bindings = [], $useReadPdo = true)
     {
         $records = $this->select($query, $bindings);
+
         return count($records) > 0 ? reset($records) : null;
     }
 
     public function insert($query, $bindings = [])
     {
-        throw new Exception("the method is not implemented.");
+        throw new Exception('the method is not implemented.');
     }
 
     public function update($query, $bindings = [])
     {
-        throw new Exception("the method is not implemented.");
+        throw new Exception('the method is not implemented.');
     }
 
     public function delete($query, $bindings = [])
     {
-        throw new Exception("the method is not implemented.");
+        throw new Exception('the method is not implemented.');
     }
 
     public function unprepared($query)
     {
-        throw new Exception("the method is not implemented.");
+        throw new Exception('the method is not implemented.');
     }
 
     public function transaction(Closure $callback, $attempts = 1)
     {
-        throw new Exception("the method is not implemented.");
+        throw new Exception('the method is not implemented.');
     }
 
     public function beginTransaction()
     {
-        throw new Exception("the method is not implemented.");
+        throw new Exception('the method is not implemented.');
     }
 
     public function commit()
     {
-        throw new Exception("the method is not implemented.");
+        throw new Exception('the method is not implemented.');
     }
 
     public function rollBack()
     {
-        throw new Exception("the method is not implemented.");
+        throw new Exception('the method is not implemented.');
     }
 
     public function transactionLevel()
     {
-        throw new Exception("the method is not implemented.");
+        throw new Exception('the method is not implemented.');
     }
 
     public function pretend(Closure $callback)
     {
-        throw new Exception("the method is not implemented.");
+        throw new Exception('the method is not implemented.');
     }
 
     public function getSchemaBuilder()
@@ -110,6 +112,7 @@ class JsonConnection extends BaseConnection implements ConnectionInterface
         if (is_null($this->schemaGrammar)) {
             $this->useDefaultSchemaGrammar();
         }
+
         return new Builder($this);
     }
 
@@ -128,9 +131,10 @@ class JsonConnection extends BaseConnection implements ConnectionInterface
         return $this->withTablePrefix(new SchemaGrammarIfx());
     }
 
-    public function prepareBindings(array $bindings){
+    public function prepareBindings(array $bindings)
+    {
         $grammar = $this->getQueryGrammar();
-        if($this->isTransEncoding()){
+        if ($this->isTransEncoding()) {
             $db_encoding = $this->getConfig('db_encoding');
             $client_encoding = $this->getConfig('client_encoding');
             foreach ($bindings as $key => &$value) {
@@ -144,7 +148,7 @@ class JsonConnection extends BaseConnection implements ConnectionInterface
                 } elseif ($value === false) {
                     $value = 0;
                 }
-                if(is_string($value)) {
+                if (is_string($value)) {
                     $value = $this->convertCharset($client_encoding, $db_encoding, $value);
                 }
             }
@@ -157,95 +161,107 @@ class JsonConnection extends BaseConnection implements ConnectionInterface
                 }
             }
         }
+
         return $bindings;
     }
 
-    protected function isTransEncoding(){
+    protected function isTransEncoding()
+    {
         $db_encoding = $this->getConfig('db_encoding');
         $client_encoding = $this->getConfig('client_encoding');
-        return ($db_encoding && $client_encoding && ($db_encoding != $client_encoding));
+
+        return $db_encoding && $client_encoding && ($db_encoding != $client_encoding);
     }
 
-    protected function convertCharset($in_encoding, $out_encoding, $value){
+    protected function convertCharset($in_encoding, $out_encoding, $value)
+    {
         //return iconv($in_encoding, "{$out_encoding}//IGNORE", trim($value));
         return $value;
     }
 
     public function select($query, $bindings = [], $useReadPdo = true)
     {
-        if(config("app.debug"))
-            Log::debug("query: ".$query." with ".implode(', ', $bindings));
+        if (config('app.debug')) {
+            Log::debug('query: '.$query.' with '.implode(', ', $bindings));
+        }
 
-        $uri = Arr::get($this->config, "uri");
-        $source = Arr::get($this->config, "source");
-        $token = Arr::get($this->config, "token");
+        $uri = Arr::get($this->config, 'uri');
+        $source = Arr::get($this->config, 'source');
+        $token = Arr::get($this->config, 'token');
 
-        $client = new Client([ "timeout" => Arr::get($this->config, "timeout", 150), "
-            connection_timeout" => Arr::get($this->config, "connection_timeout", 150), ]);
+        $client = new Client(['timeout' => Arr::get($this->config, 'timeout', 150), '
+            connection_timeout'         => Arr::get($this->config, 'connection_timeout', 150)]);
 
-        $substatments = explode("?", $query);
+        $substatments = explode('?', $query);
 
         $countBindings = count($bindings);
 
-        if(count($substatments)  <> ($countBindings+1))  throw new Exception("the query {$query} not matches the count ({$countBindings}) of bingings.");
+        if (count($substatments) != ($countBindings + 1)) {
+            throw new Exception("the query {$query} not matches the count ({$countBindings}) of bingings.");
+        }
 
         $sql = $substatments[0];
-        if(count($substatments)>1){
-            for ($i=0; $i<$countBindings; $i++){
+        if (count($substatments) > 1) {
+            for ($i = 0; $i < $countBindings; $i++) {
                 $bind = $bindings[$i];
-                if($bind === null){
-                    $sql .= "null".$substatments[$i+1];
-                } else if(is_numeric($bind)){
-                    $sql .= "{$bind}".$substatments[$i+1];
+                if ($bind === null) {
+                    $sql .= 'null'.$substatments[$i + 1];
+                } elseif (is_numeric($bind)) {
+                    $sql .= "{$bind}".$substatments[$i + 1];
                 } else {
-                    $sql .= "'".str_replace("'", "''",$bind)."'".$substatments[$i+1];
+                    $sql .= "'".str_replace("'", "''", $bind)."'".$substatments[$i + 1];
                 }
-
             }
         }
 
-        if(config("app.debug")){
+        if (config('app.debug')) {
             Log::debug("the sql is ${sql}");
         }
 
         $response = $client->get($uri, [
-            "header" =>[ "Content-Type"=> "application/json; charset=utf-8",],
-            "query"=> [ "action" => "queryList", "source" => $source,
-            "_token"=>$token, "sql"=> $sql,
-        ] ]);
+            'header' => ['Content-Type'=> 'application/json; charset=utf-8'],
+            'query'  => ['action' => 'queryList', 'source' => $source,
+                '_token'          => $token, 'sql'=> $sql,
+            ], ]);
 
         $json = $response->getBody()->getContents();
 
-        if(config("app.debug")){
+        if (config('app.debug')) {
             Log::debug("the response is {$json}");
         }
 
-
-        if($json){
+        if ($json) {
             $results = json_decode($json);
-            if(is_array($results)){
+            if (is_array($results)) {
                 $results = $this->parseResult($results);
             }
+
             return $results;
         }
 
         return [];
     }
 
-    protected function parseResult($results){
-        if(!$results) return $results;
-        foreach ($results as &$result){
-            if(!$result) continue;
-            if(is_array($result)){
+    protected function parseResult($results)
+    {
+        if (!$results) {
+            return $results;
+        }
+        foreach ($results as &$result) {
+            if (!$result) {
+                continue;
+            }
+            if (is_array($result)) {
                 $result = $this->parseResult($result);
-            } else if(is_object($result)){
+            } elseif (is_object($result)) {
                 $result = $this->parseResult($result);
-            } else if(is_string($result)){
-                if(strpos($result, '%') !== false){
+            } elseif (is_string($result)) {
+                if (strpos($result, '%') !== false) {
                     $result = urldecode($result);
                 }
             }
         }
+
         return $results;
     }
 
@@ -256,7 +272,6 @@ class JsonConnection extends BaseConnection implements ConnectionInterface
 
     public function affectingStatement($query, $bindings = [])
     {
-        throw new Exception("the method is not implemented.");
+        throw new Exception('the method is not implemented.');
     }
-
 }

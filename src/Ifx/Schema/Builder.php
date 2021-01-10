@@ -9,7 +9,8 @@ class Builder extends SchemaBuilder
     /**
      * Determine if the given table exists.
      *
-     * @param  string  $table
+     * @param string $table
+     *
      * @return bool
      */
     public function hasTable($table)
@@ -24,7 +25,8 @@ class Builder extends SchemaBuilder
     /**
      * Get the column listing for a given table.
      *
-     * @param  string  $table
+     * @param string $table
+     *
      * @return array
      */
     public function getColumnListing($table)
