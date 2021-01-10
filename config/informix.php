@@ -21,8 +21,8 @@ return [
             PDO::ATTR_PERSISTENT => true,
             PDO::ATTR_CASE       => PDO::CASE_NATURAL,
             PDO::ATTR_ERRMODE    => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_TIMEOUT    => env('DB_IFX_TIMEOUT', '15')
-        ]
+            PDO::ATTR_TIMEOUT    => env('DB_IFX_TIMEOUT', '15'),
+        ],
     ],
 
     'informix-source-json' => [
