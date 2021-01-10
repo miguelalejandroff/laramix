@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Grammar;
 use Illuminate\Database\Query\Processors\Processor;
 use Illuminate\Database\Schema\Builder;
+use InvalidArgumentException;
 
 class Connection extends BaseConnection
 {
@@ -181,44 +182,44 @@ class Connection extends BaseConnection
      */
     public function statement($query, $bindings = [])
     {
-        return $this->run($query, $bindings, function ($me, $query, $bindings) {
-            if ($me->pretending()) {
+        return $this->run($query, $bindings, function ($query, $bindings) {
+            if ($this->pretending()) {
                 return true;
             }
 
             $count = substr_count($query, '?');
             if ($count == count($bindings)) {
-                $bindings = $me->prepareBindings($bindings);
+                $bindings = $this->prepareBindings($bindings);
 
-                return $me->getPdo()->prepare($query)->execute($bindings);
+                return $this->getPdo()->prepare($query)->execute($bindings);
             }
 
             if (count($bindings) % $count > 0) {
-                throw new \InvalidArgumentException('the driver can not support multi-insert.');
+                throw new InvalidArgumentException('the driver can not support multi-insert.');
             }
 
             $mutiBindings = array_chunk($bindings, $count);
-            $me->beginTransaction();
+            $this->beginTransaction();
 
             try {
-                $pdo = $me->getPdo();
+                $pdo = $this->getPdo();
                 $stmt = $pdo->prepare($query);
 
                 foreach ($mutiBindings as $mutiBinding) {
-                    $mutiBinding = $me->prepareBindings($mutiBinding);
+                    $mutiBinding = $this->prepareBindings($mutiBinding);
                     $stmt->execute($mutiBinding);
                 }
             } catch (\Exception $e) {
-                $me->rollBack();
+                $this->rollBack();
 
                 return false;
             } catch (\Throwable $e) {
-                $me->rollBack();
+                $this->rollBack();
 
                 return false;
             }
 
-            $me->commit();
+            $this->commit();
 
             return true;
         });

@@ -11,12 +11,21 @@ return [
         'server'          => env('DB_IFX_SERVER', 'ol_informix'),
         'db_locale'       => 'en_US.819',
         'client_locale'   => 'en_US.819',
-        'db_encoding'     => 'GBK',
+        'client_encoding' => 'UTF-8',
+        'db_encoding'     => 'UTF-8',
+        'protocol'        => 'onsoctcp',
         'initSqls'        => false,
+        'prefix'          => '',
         'enable_scroll'   => 1,
         'protocol'        => 'onsoctcp',
         'client_encoding' => 'UTF-8',
         'prefix'          => '',
+        'options'         => [
+            PDO::ATTR_PERSISTENT => true,
+            PDO::ATTR_CASE       => PDO::CASE_NATURAL,
+            PDO::ATTR_ERRMODE    => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_TIMEOUT    => env('DB_IFX_TIMEOUT', '15'),
+        ],
     ],
 
     'informix-source-json' => [

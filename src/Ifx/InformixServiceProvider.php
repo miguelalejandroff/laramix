@@ -45,9 +45,11 @@ class InformixServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([
-            $this->getConfigFile() => config_path('informix.php'),
-        ]);
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                $this->getConfigFile() => config_path('informix.php'),
+            ], 'config');
+        }
     }
 
     /**
@@ -64,12 +66,12 @@ class InformixServiceProvider extends ServiceProvider
     /**
      * Get root path of package.
      *
-     * @param string $file
+     * @param string $path
      *
      * @return string
      */
-    protected function getPathPackage($file = 'src')
+    protected function getPathPackage($path = 'src/')
     {
-        return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.$file;
+        return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.$path;
     }
 }
