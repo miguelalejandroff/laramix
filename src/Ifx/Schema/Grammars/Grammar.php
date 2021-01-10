@@ -2,10 +2,10 @@
 
 namespace Archytech\Laravel\Ifx\Schema\Grammars;
 
-use Illuminate\Database\Query\Expression;
-use Illuminate\Database\Schema\Grammars\Grammar as SchemaGrammar;
 use Illuminate\Database\Connection;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Schema\Grammars\Grammar as SchemaGrammar;
 use Illuminate\Support\Fluent;
 
 class Grammar extends SchemaGrammar
@@ -34,6 +34,7 @@ class Grammar extends SchemaGrammar
 
     /**
      * @param $table
+     *
      * @return string
      */
     public function compileColumnExists($table)
@@ -43,13 +44,15 @@ class Grammar extends SchemaGrammar
 
     /**
      * @param Blueprint $blueprint
+     *
      * @return string
      */
     protected function addPrimaryKeys(Blueprint $blueprint)
     {
         $primary = $this->getCommandByName($blueprint, 'primary');
-        if (! is_null($primary)) {
+        if (!is_null($primary)) {
             $columns = $this->columnize($primary->columns);
+
             return ", primary key ( {$columns} ) constraint {$primary->index}";
         }
     }
@@ -58,6 +61,7 @@ class Grammar extends SchemaGrammar
      * addForeignKeys().
      *
      * @param Blueprint $blueprint
+     *
      * @return string
      */
     protected function addForeignKeys(Blueprint $blueprint)
@@ -84,7 +88,7 @@ class Grammar extends SchemaGrammar
              * build out the syntax for what should happen on an update or delete of
              * the affected columns, which will get something like "cascade", etc.
              */
-            if (! is_null($foreign->onDelete)) {
+            if (!is_null($foreign->onDelete)) {
                 $sql .= " on delete {$foreign->onDelete}";
             }
         }
@@ -96,14 +100,15 @@ class Grammar extends SchemaGrammar
      * Compile a create key command.
      *
      * @param Blueprint $blueprint
-     * @param Fluent $command
+     * @param Fluent    $command
+     *
      * @return string
      */
     public function compileCreate(Blueprint $blueprint, Fluent $command)
     {
         $columns = implode(', ', $this->getColumns($blueprint));
 
-        $sql = $blueprint->temporary ? "create temp" : 'create';
+        $sql = $blueprint->temporary ? 'create temp' : 'create';
 
         $sql .= ' table '.$this->wrapTable($blueprint)." ( $columns";
 
@@ -120,14 +125,16 @@ class Grammar extends SchemaGrammar
 
         $sql .= ' )';
 
-        if(isset($blueprint->engine)){
-            if(is_string($blueprint->engine))
-                $sql.=$blueprint->engine;
-            else if(is_array($blueprint->engine)){
-                if($blueprint->engine['extent'] > 32)
-                    $sql.=" extent size ".(int)$blueprint->engine['extent'];
-                if($blueprint->engine['next'] > 32)
-                    $sql.=" next size ".(int)$blueprint->engine['next'];
+        if (isset($blueprint->engine)) {
+            if (is_string($blueprint->engine)) {
+                $sql .= $blueprint->engine;
+            } elseif (is_array($blueprint->engine)) {
+                if ($blueprint->engine['extent'] > 32) {
+                    $sql .= ' extent size '.(int) $blueprint->engine['extent'];
+                }
+                if ($blueprint->engine['next'] > 32) {
+                    $sql .= ' next size '.(int) $blueprint->engine['next'];
+                }
             }
         }
 
@@ -138,7 +145,8 @@ class Grammar extends SchemaGrammar
      * Compile a add key command.
      *
      * @param Blueprint $blueprint
-     * @param Fluent $command
+     * @param Fluent    $command
+     *
      * @return string
      */
     public function compileAdd(Blueprint $blueprint, Fluent $command)
@@ -152,12 +160,12 @@ class Grammar extends SchemaGrammar
         return $sql .= ' )';
     }
 
-
     /**
      * Compile a primary key command.
      *
      * @param Blueprint $blueprint
-     * @param Fluent $command
+     * @param Fluent    $command
+     *
      * @return string
      */
     public function compilePrimary(Blueprint $blueprint, Fluent $command)
@@ -177,7 +185,8 @@ class Grammar extends SchemaGrammar
      * Compile a foreign key command.
      *
      * @param Blueprint $blueprint
-     * @param Fluent $command
+     * @param Fluent    $command
+     *
      * @return string
      */
     public function compileForeign(Blueprint $blueprint, Fluent $command)
@@ -205,10 +214,10 @@ class Grammar extends SchemaGrammar
              * build out the syntax for what should happen on an update or delete of
              * the affected columns, which will get something like "cascade", etc.
              */
-            if (! is_null($command->onDelete)) {
+            if (!is_null($command->onDelete)) {
                 $sql .= " on delete {$command->onDelete}";
             }
-            $sql .=" constraint {$command->index}";
+            $sql .= " constraint {$command->index}";
 
             return $sql;
         }
@@ -218,7 +227,8 @@ class Grammar extends SchemaGrammar
      * Compile a unique key command.
      *
      * @param Blueprint $blueprint
-     * @param Fluent $command
+     * @param Fluent    $command
+     *
      * @return string
      */
     public function compileUnique(Blueprint $blueprint, Fluent $command)
@@ -234,7 +244,8 @@ class Grammar extends SchemaGrammar
      * Compile a plain index key command.
      *
      * @param Blueprint $blueprint
-     * @param Fluent $command
+     * @param Fluent    $command
+     *
      * @return string
      */
     public function compileIndex(Blueprint $blueprint, Fluent $command)
@@ -250,7 +261,8 @@ class Grammar extends SchemaGrammar
      * Compile a drop table command.
      *
      * @param Blueprint $blueprint
-     * @param Fluent $command
+     * @param Fluent    $command
+     *
      * @return string
      */
     public function compileDrop(Blueprint $blueprint, Fluent $command)
@@ -262,7 +274,8 @@ class Grammar extends SchemaGrammar
      * Compile a drop column command.
      *
      * @param Blueprint $blueprint
-     * @param Fluent $command
+     * @param Fluent    $command
+     *
      * @return string
      */
     public function compileDropColumn(Blueprint $blueprint, Fluent $command)
@@ -278,12 +291,14 @@ class Grammar extends SchemaGrammar
      * Compile a drop primary key command.
      *
      * @param Blueprint $blueprint
-     * @param Fluent $command
+     * @param Fluent    $command
+     *
      * @return string
      */
     public function compileDropPrimary(Blueprint $blueprint, Fluent $command)
     {
         $table = $this->wrapTable($blueprint);
+
         return "alter table {$table} drop constraint {$command->index}";
     }
 
@@ -291,12 +306,14 @@ class Grammar extends SchemaGrammar
      * Compile a drop unique key command.
      *
      * @param Blueprint $blueprint
-     * @param Fluent $command
+     * @param Fluent    $command
+     *
      * @return string
      */
     public function compileDropUnique(Blueprint $blueprint, Fluent $command)
     {
         $table = $this->wrapTable($blueprint);
+
         return "alter table {$table} drop constraint {$command->index}";
     }
 
@@ -304,7 +321,8 @@ class Grammar extends SchemaGrammar
      * Compile a drop index command.
      *
      * @param Blueprint $blueprint
-     * @param Fluent $command
+     * @param Fluent    $command
+     *
      * @return string
      */
     public function compileDropIndex(Blueprint $blueprint, Fluent $command)
@@ -316,12 +334,14 @@ class Grammar extends SchemaGrammar
      * Compile a drop foreign key command.
      *
      * @param Blueprint $blueprint
-     * @param Fluent $command
+     * @param Fluent    $command
+     *
      * @return string
      */
     public function compileDropForeign(Blueprint $blueprint, Fluent $command)
     {
         $table = $this->wrapTable($blueprint);
+
         return "alter table {$table} drop constraint {$command->index}";
     }
 
@@ -329,34 +349,39 @@ class Grammar extends SchemaGrammar
      * Compile a rename table command.
      *
      * @param Blueprint $blueprint
-     * @param Fluent $command
+     * @param Fluent    $command
+     *
      * @return string
      */
     public function compileRename(Blueprint $blueprint, Fluent $command)
     {
         $table = $this->wrapTable($blueprint);
+
         return "rename table {$table} to ".$this->wrapTable($command->to);
     }
 
     /**
      * Compile a rename column command.
      *
-     * @param Blueprint $blueprint
-     * @param Fluent $command
+     * @param Blueprint  $blueprint
+     * @param Fluent     $command
      * @param Connection $connection
+     *
      * @return array
      */
     public function compileRenameColumn(Blueprint $blueprint, Fluent $command, Connection $connection)
     {
         $table = $this->wrapTable($blueprint);
         $rs = ["rename column {$table}.{$command->from} to {$command->to}"];
+
         return $rs;
     }
 
     /**
      * Wrap a single string in keyword identifiers.
      *
-     * @param  string  $value
+     * @param string $value
+     *
      * @return string
      */
     protected function wrapValue($value)
@@ -364,6 +389,7 @@ class Grammar extends SchemaGrammar
         if ($value === '*') {
             return $value;
         }
+
         return $value;
     }
 
@@ -371,12 +397,15 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a char type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
-    protected function typeChar(Fluent $column) {
-        if($column->length < 256){
-            return 'char('.(int)$column->length.')';
+    protected function typeChar(Fluent $column)
+    {
+        if ($column->length < 256) {
+            return 'char('.(int) $column->length.')';
         }
+
         return 'char(255)';
     }
 
@@ -384,21 +413,25 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a string type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeString(Fluent $column)
     {
-        if($column->length < 256)
+        if ($column->length < 256) {
             return "varchar({$column->length})";
-        else if($column->length < 32740)
+        } elseif ($column->length < 32740) {
             return "lvarchar({$column->length})";
-        return "lvarchar(32739)";
+        }
+
+        return 'lvarchar(32739)';
     }
 
     /**
      * Create the column definition for a long text type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeLongText(Fluent $column)
@@ -410,6 +443,7 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a medium text type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeMediumText(Fluent $column)
@@ -421,6 +455,7 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a text type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeText(Fluent $column)
@@ -432,13 +467,15 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a integer type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeBigInteger(Fluent $column)
     {
-        if($column->autoIncrement){
+        if ($column->autoIncrement) {
             return 'serial8(1)';
         }
+
         return 'int8';
     }
 
@@ -446,13 +483,15 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a integer type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeInteger(Fluent $column)
     {
-        if($column->autoIncrement){
+        if ($column->autoIncrement) {
             return 'serial(1)';
         }
+
         return 'int';
     }
 
@@ -460,6 +499,7 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a medium integer type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeMediumInteger(Fluent $column)
@@ -471,6 +511,7 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a small integer type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeSmallInteger(Fluent $column)
@@ -482,6 +523,7 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a tiny integer type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeTinyInteger(Fluent $column)
@@ -493,6 +535,7 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a float type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeFloat(Fluent $column)
@@ -504,6 +547,7 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a double type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeDouble(Fluent $column)
@@ -515,6 +559,7 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a decimal type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeDecimal(Fluent $column)
@@ -526,6 +571,7 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a boolean type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeBoolean(Fluent $column)
@@ -537,6 +583,7 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a enum type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeEnum(Fluent $column)
@@ -548,6 +595,7 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a date type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeDate(Fluent $column)
@@ -559,6 +607,7 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a date-time type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeDateTime(Fluent $column)
@@ -570,6 +619,7 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a time type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeTime(Fluent $column)
@@ -581,6 +631,7 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a timestamp type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeTimestamp(Fluent $column)
@@ -592,6 +643,7 @@ class Grammar extends SchemaGrammar
      * Create the column definition for a binary type.
      *
      * @param Fluent $column
+     *
      * @return string
      */
     protected function typeBinary(Fluent $column)
@@ -603,13 +655,14 @@ class Grammar extends SchemaGrammar
      * Get the SQL for a nullable column modifier.
      *
      * @param Blueprint $blueprint
-     * @param Fluent $column
+     * @param Fluent    $column
+     *
      * @return string
      */
     protected function modifyNullable(Blueprint $blueprint, Fluent $column)
     {
         $null = $column->nullable ? ' ' : ' not null';
-        if (! is_null($column->default)) {
+        if (!is_null($column->default)) {
             return ' default '.$this->getDefaultValue($column->default).$null;
         }
 
@@ -620,7 +673,8 @@ class Grammar extends SchemaGrammar
      * Get the SQL for a default column modifier.
      *
      * @param Blueprint $blueprint
-     * @param Fluent $column
+     * @param Fluent    $column
+     *
      * @return string
      */
     protected function modifyDefault(Blueprint $blueprint, Fluent $column)
@@ -632,7 +686,7 @@ class Grammar extends SchemaGrammar
      * Get the SQL for an auto-increment column modifier.
      *
      * @param Blueprint $blueprint
-     * @param Fluent $column
+     * @param Fluent    $column
      */
     protected function modifyIncrement(Blueprint $blueprint, Fluent $column)
     {
@@ -643,18 +697,20 @@ class Grammar extends SchemaGrammar
 
     /**
      * @param Blueprint $blueprint
-     * @param Fluent $column
+     * @param Fluent    $column
+     *
      * @return string
      */
     protected function modifyBefore(Blueprint $blueprint, Fluent $column)
     {
-        if (! is_null($column->before)) {
+        if (!is_null($column->before)) {
             return ' before '.$this->wrap($column->before);
         }
     }
 
     /**
      * @param mixed $value
+     *
      * @return mixed|string
      */
     protected function getDefaultValue($value)

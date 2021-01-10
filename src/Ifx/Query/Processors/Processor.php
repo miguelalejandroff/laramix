@@ -10,7 +10,8 @@ class Processor extends QueryProcessor
     /**
      * Process the results of a column listing query.
      *
-     * @param  array  $results
+     * @param array $results
+     *
      * @return array
      */
     public function processColumnListing($results)
@@ -26,9 +27,10 @@ class Processor extends QueryProcessor
 
     /**
      * @param Builder $query
-     * @param string $sql
-     * @param array $values
-     * @param null $sequence
+     * @param string  $sql
+     * @param array   $values
+     * @param null    $sequence
+     *
      * @return int
      */
     public function processInsertGetId(Builder $query, $sql, $values, $sequence = null)
@@ -38,12 +40,12 @@ class Processor extends QueryProcessor
 
     /**
      * @param Builder $query
-     * @param array $results
+     * @param array   $results
+     *
      * @return array
      */
     public function processSelect(Builder $query, $results)
     {
         return $results;
     }
-
 }
