@@ -1,5 +1,9 @@
 # Informix Driver Package for Laravel
 
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
+[![Packagist Downloads](https://img.shields.io/packagist/dm/archytech/laramix)](https://packagist.org/packages/archytech/laramix)
+[![StyleCI](https://github.styleci.io/repos/327844092/shield?branch=master)](https://github.styleci.io/repos/327844092?branch=master)
+
 `laramix` is an Informix Driver Package for [Laravel Framework](http://laravel.com/) - thanks to [@taylorotwell](https://github.com/taylorotwell). `laramix` is an extension of [Illuminate/Database](https://github.com/illuminate/database) that uses either the PDO extension wrapped into the PDO namespace.
 
 ## Requirements
@@ -44,7 +48,7 @@ This will copy the configuration file to `config/informix.php`
 Add this configuration to `.env` file in the root of your project:
 
 ```dotenv
-# Informix #
+## Informix ##
 DB_CONNECTION=informix
 DB_IFX_HOST=127.0.0.1
 DB_IFX_SERVICE=9188
@@ -54,6 +58,12 @@ DB_IFX_PASSWORD=
 DB_IFX_SERVER=ol_informix07
 DB_IFX_URI=
 DB_IFX_TOKEN=
+
+## Environment ##
+INFORMIXDIR=/opt/IBM/informix
+INFORMIXSERVER=ol_informix07
+LD_LIBRARY_PATH=${INFORMIXDIR}/lib/:${INFORMIXDIR}/lib/cli:${INFORMIXDIR}/esql
+PATH=${PATH}:${INFORMIXDIR}/bin:${INFORMIXDIR}/lib
 ```
 
 ## Documentation  and Usage
