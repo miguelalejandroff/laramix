@@ -17,9 +17,6 @@ return [
         'initSqls'        => false,
         'prefix'          => '',
         'enable_scroll'   => 1,
-        'protocol'        => 'onsoctcp',
-        'client_encoding' => 'UTF-8',
-        'prefix'          => '',
         'options'         => [
             PDO::ATTR_PERSISTENT => true,
             PDO::ATTR_CASE       => PDO::CASE_NATURAL,
