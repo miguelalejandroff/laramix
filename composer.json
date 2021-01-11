@@ -19,8 +19,8 @@
         }
     ],
     "require": {
-        "ext-pdo": "*",
         "php": "^6.0|^7.0",
+        "ext-pdo": "*",
         "guzzlehttp/guzzle": "^6.0|^7.0",
         "illuminate/support": "^6.0|^7.0",
         "illuminate/database": "^6.0|^7.0",
