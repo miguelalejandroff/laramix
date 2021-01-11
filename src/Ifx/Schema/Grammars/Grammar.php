@@ -2,14 +2,25 @@
 
 namespace Archytech\Laravel\Ifx\Schema\Grammars;
 
+use Archytech\Laravel\Ifx\ReservedWords;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\Grammar as SchemaGrammar;
 use Illuminate\Support\Fluent;
+use Illuminate\Support\Str;
 
 class Grammar extends SchemaGrammar
 {
+    use ReservedWords;
+
+    /**
+     * The keyword identifier wrapper format.
+     *
+     * @var string
+     */
+    protected $wrapper = '%s';
+
     /**
      * The possible column modifiers.
      *
@@ -386,6 +397,9 @@ class Grammar extends SchemaGrammar
      */
     protected function wrapValue($value)
     {
+        if ($this->isReserved($value))
+            return Str::upper(parent::wrapValue($value));
+
         if ($value === '*') {
             return $value;
         }

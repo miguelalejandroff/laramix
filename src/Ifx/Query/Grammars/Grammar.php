@@ -2,16 +2,32 @@
 
 namespace Archytech\Laravel\Ifx\Query\Grammars;
 
+use Archytech\Laravel\Ifx\ReservedWords;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Grammars\Grammar as QueryGrammar;
+use Illuminate\Support\Str;
 
 class Grammar extends QueryGrammar
 {
+    use ReservedWords;
+
+    /**
+     * The keyword identifier wrapper format.
+     *
+     * @var string
+     */
+    protected $wrapper = '%s';
+
+    /**
+     * @var string
+     */
+    protected $schema_prefix = '';
+
     /**
      * Compile the "limit" portions of the query.
      *
      * @param Builder $query
-     * @param int     $limit
+     * @param int $limit
      *
      * @return string
      */
@@ -93,6 +109,9 @@ class Grammar extends QueryGrammar
      */
     protected function wrapValue($value)
     {
+        if ($this->isReserved($value))
+            return Str::upper(parent::wrapValue($value));
+
         if ($value === '*') {
             return $value;
         }
@@ -153,8 +172,10 @@ class Grammar extends QueryGrammar
     {
         $existsQuery = clone $query;
         $existsQuery->columns = [];
+        $existsQuery->selectRaw('1 as "exists"')
+                    ->whereRaw('rownum = 1');
 
-        return $this->compileSelect($existsQuery->selectRaw('1 e'));
+        return $this->compileSelect($existsQuery);
     }
 
     /**
@@ -208,4 +229,25 @@ class Grammar extends QueryGrammar
 
         return $bitand.'('.$this->wrap($where['column']).', '.$this->wrapValue($values[0]).' ) '.$where['operator'].' '.$this->wrapValue($values[1]);
     }
+
+    /**
+     * Return the schema prefix.
+     *
+     * @return string
+     */
+    public function getSchemaPrefix()
+    {
+        return ! empty($this->schema_prefix) ? $this->wrapValue($this->schema_prefix) . '.' : '';
+    }
+
+    /**
+     * Set the schema prefix.
+     *
+     * @param string $prefix
+     */
+    public function setSchemaPrefix($prefix)
+    {
+        $this->schema_prefix = $prefix;
+    }
+
 }
