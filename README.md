@@ -1,8 +1,9 @@
 # Informix Driver Package for Laravel
 
+[![StyleCI](https://github.styleci.io/repos/327844092/shield?branch=1.0.1)](https://github.styleci.io/repos/327844092?branch=1.0.1)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 [![Packagist Downloads](https://img.shields.io/packagist/dm/archytech/laramix)](https://packagist.org/packages/archytech/laramix)
-[![StyleCI](https://github.styleci.io/repos/327844092/shield?branch=1.0.1)](https://github.styleci.io/repos/327844092?branch=1.0.1)
+[![Packagist Downloads](https://poser.pugx.org/archytech/laramix/v/stable.svg)](https://packagist.org/packages/archytech/laramix)
 
 `laramix` is an Informix Driver Package for [Laravel Framework](http://laravel.com/) - thanks to [@taylorotwell](https://github.com/taylorotwell). `laramix` is an extension of [Illuminate/Database](https://github.com/illuminate/database) that uses either the PDO extension wrapped into the PDO namespace.
 
@@ -43,7 +44,7 @@ php artisan vendor:publish --provider="Archytech\Laravel\Ifx\InformixServiceProv
 
 This will copy the configuration file to `config/informix.php`
 
-## Configure `.env` files
+## Configure .env files
 
 Add this configuration to `.env` file in the root of your project:
 
