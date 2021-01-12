@@ -54,9 +54,11 @@ class Connection extends BaseConnection
             $db_encoding = $this->getConfig('db_encoding');
             $client_encoding = $this->getConfig('client_encoding');
             foreach ($bindings as $key => &$value) {
-                // We need to transform all instances of DateTimeInterface into the actual
-                // date string. Each query grammar maintains its own date string format
-                // so we'll just ask the grammar for the format to get from the date.
+                /*
+                 * We need to transform all instances of DateTimeInterface into the actual
+                 * date string. Each query grammar maintains its own date string format
+                 * so we'll just ask the grammar for the format to get from the date.
+                 */
                 if ($value instanceof DateTimeInterface) {
                     $value = $value->format($grammar->getDateFormat());
                 } elseif ($value === false) {
