@@ -121,7 +121,7 @@ class Grammar extends SchemaGrammar
 
         $sql = $blueprint->temporary ? 'create temp' : 'create';
 
-        $sql .= ' table '.$this->wrapTable($blueprint)." ( $columns";
+        $sql .= ' table ' . $this->wrapTable($blueprint) . " ( $columns";
 
         /*
          * To be able to name the primary/foreign keys when the table is
@@ -141,10 +141,10 @@ class Grammar extends SchemaGrammar
                 $sql .= $blueprint->engine;
             } elseif (is_array($blueprint->engine)) {
                 if ($blueprint->engine['extent'] > 32) {
-                    $sql .= ' extent size '.(int) $blueprint->engine['extent'];
+                    $sql .= ' extent size ' . (int) $blueprint->engine['extent'];
                 }
                 if ($blueprint->engine['next'] > 32) {
-                    $sql .= ' next size '.(int) $blueprint->engine['next'];
+                    $sql .= ' next size ' . (int) $blueprint->engine['next'];
                 }
             }
         }
@@ -164,7 +164,7 @@ class Grammar extends SchemaGrammar
     {
         $columns = implode(', ', $this->getColumns($blueprint));
 
-        $sql = 'alter table '.$this->wrapTable($blueprint)." add ( $columns";
+        $sql = 'alter table ' . $this->wrapTable($blueprint) . " add ( $columns";
 
         $sql .= (string) $this->addPrimaryKeys($blueprint);
 
@@ -278,7 +278,7 @@ class Grammar extends SchemaGrammar
      */
     public function compileDrop(Blueprint $blueprint, Fluent $command)
     {
-        return 'drop table '.$this->wrapTable($blueprint);
+        return 'drop table ' . $this->wrapTable($blueprint);
     }
 
     /**
@@ -295,7 +295,7 @@ class Grammar extends SchemaGrammar
 
         $table = $this->wrapTable($blueprint);
 
-        return 'alter table '.$table.' drop ( '.implode(', ', $columns).' )';
+        return 'alter table ' . $table . ' drop ( ' . implode(', ', $columns) . ' )';
     }
 
     /**
@@ -368,7 +368,7 @@ class Grammar extends SchemaGrammar
     {
         $table = $this->wrapTable($blueprint);
 
-        return "rename table {$table} to ".$this->wrapTable($command->to);
+        return "rename table {$table} to " . $this->wrapTable($command->to);
     }
 
     /**
@@ -397,15 +397,15 @@ class Grammar extends SchemaGrammar
      */
     protected function wrapValue($value)
     {
-        if ($this->isReserved($value)) {
-            return Str::upper(parent::wrapValue($value));
-        }
+        // if ($this->isReserved($value)) {
+        //     return Str::upper(parent::wrapValue($value));
+        // }
 
         if ($value === '*') {
             return $value;
         }
 
-        return $value;
+        return str_replace('"', '', $value);
     }
 
     /**
@@ -418,7 +418,7 @@ class Grammar extends SchemaGrammar
     protected function typeChar(Fluent $column)
     {
         if ($column->length < 256) {
-            return 'char('.(int) $column->length.')';
+            return 'char(' . (int) $column->length . ')';
         }
 
         return 'char(255)';
@@ -678,7 +678,7 @@ class Grammar extends SchemaGrammar
     {
         $null = $column->nullable ? ' ' : ' not null';
         if (!is_null($column->default)) {
-            return ' default '.$this->getDefaultValue($column->default).$null;
+            return ' default ' . $this->getDefaultValue($column->default) . $null;
         }
 
         return $null;
@@ -719,7 +719,7 @@ class Grammar extends SchemaGrammar
     protected function modifyBefore(Blueprint $blueprint, Fluent $column)
     {
         if (!is_null($column->before)) {
-            return ' before '.$this->wrap($column->before);
+            return ' before ' . $this->wrap($column->before);
         }
     }
 
@@ -735,11 +735,11 @@ class Grammar extends SchemaGrammar
         }
 
         if (is_bool($value)) {
-            return "'".(int) $value."'";
+            return "'" . (int) $value . "'";
         }
 
         if (is_string($value)) {
-            return "'".strval($value)."'";
+            return "'" . strval($value) . "'";
         }
 
         return strval($value);

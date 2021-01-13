@@ -71,16 +71,16 @@ class Grammar extends QueryGrammar
         $select = 'select';
 
         if ($query->offset > 0) {
-            $select .= ' skip '.(int) $query->offset;
+            $select .= ' skip ' . (int) $query->offset;
         }
 
         if ($query->limit > 0) {
-            $select .= ' first '.(int) $query->limit;
+            $select .= ' first ' . (int) $query->limit;
         }
 
         $select .= $query->distinct ? ' distinct' : '';
 
-        return $select.' '.$this->columnize($columns);
+        return $select . ' ' . $this->columnize($columns);
     }
 
     /**
@@ -109,9 +109,9 @@ class Grammar extends QueryGrammar
      */
     protected function wrapValue($value)
     {
-        if ($this->isReserved($value)) {
-            return Str::upper(parent::wrapValue($value));
-        }
+        // if ($this->isReserved($value)) {
+        //     return Str::upper(parent::wrapValue($value));
+        // }
 
         if ($value === '*') {
             return $value;
@@ -156,7 +156,7 @@ class Grammar extends QueryGrammar
         }
 
         if (isset($query->unionOrders)) {
-            $sql .= ' '.$this->compileOrders($query, $query->unionOrders);
+            $sql .= ' ' . $this->compileOrders($query, $query->unionOrders);
         }
 
         return ltrim($sql);
@@ -174,7 +174,7 @@ class Grammar extends QueryGrammar
         $existsQuery = clone $query;
         $existsQuery->columns = [];
         $existsQuery->selectRaw('1 as "exists"')
-                    ->whereRaw('rownum = 1');
+            ->whereRaw('rownum = 1');
 
         return $this->compileSelect($existsQuery);
     }
@@ -209,7 +209,7 @@ class Grammar extends QueryGrammar
          * bindings so we will loop through the record and parameterize them all.
          */
         $parameters = [];
-        $parameters[] = '('.$this->parameterize($values).')';
+        $parameters[] = '(' . $this->parameterize($values) . ')';
         $parameters = implode(', ', $parameters);
 
         return "insert into {$table} ({$columns}) values {$parameters}";
@@ -228,7 +228,7 @@ class Grammar extends QueryGrammar
         $bitand = $where['not'] ? 'not bitand' : 'bitand';
         $values = $where['values'];
 
-        return $bitand.'('.$this->wrap($where['column']).', '.$this->wrapValue($values[0]).' ) '.$where['operator'].' '.$this->wrapValue($values[1]);
+        return $bitand . '(' . $this->wrap($where['column']) . ', ' . $this->wrapValue($values[0]) . ' ) ' . $where['operator'] . ' ' . $this->wrapValue($values[1]);
     }
 
     /**
@@ -238,7 +238,7 @@ class Grammar extends QueryGrammar
      */
     public function getSchemaPrefix()
     {
-        return !empty($this->schema_prefix) ? $this->wrapValue($this->schema_prefix).'.' : '';
+        return !empty($this->schema_prefix) ? $this->wrapValue($this->schema_prefix) . '.' : '';
     }
 
     /**
