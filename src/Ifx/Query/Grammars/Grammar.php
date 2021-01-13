@@ -27,7 +27,7 @@ class Grammar extends QueryGrammar
      * Compile the "limit" portions of the query.
      *
      * @param Builder $query
-     * @param int $limit
+     * @param int     $limit
      *
      * @return string
      */
@@ -109,8 +109,9 @@ class Grammar extends QueryGrammar
      */
     protected function wrapValue($value)
     {
-        if ($this->isReserved($value))
+        if ($this->isReserved($value)) {
             return Str::upper(parent::wrapValue($value));
+        }
 
         if ($value === '*') {
             return $value;
@@ -237,7 +238,7 @@ class Grammar extends QueryGrammar
      */
     public function getSchemaPrefix()
     {
-        return ! empty($this->schema_prefix) ? $this->wrapValue($this->schema_prefix) . '.' : '';
+        return !empty($this->schema_prefix) ? $this->wrapValue($this->schema_prefix).'.' : '';
     }
 
     /**
@@ -249,5 +250,4 @@ class Grammar extends QueryGrammar
     {
         $this->schema_prefix = $prefix;
     }
-
 }
