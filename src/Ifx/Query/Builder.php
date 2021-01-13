@@ -15,6 +15,7 @@ class Builder extends QueryBuilder
      * Run a pagination count query.
      *
      * @param array $columns
+     *
      * @return array
      */
     protected function runPaginationCountQuery($columns = ['*'])
@@ -22,7 +23,7 @@ class Builder extends QueryBuilder
         if ($this->groups || $this->havings) {
             $clone = $this->cloneForPaginationCount();
 
-            if (is_null($clone->columns) && ! empty($this->joins)) {
+            if (is_null($clone->columns) && !empty($this->joins)) {
                 $clone->select($this->from.'.*');
             }
 
@@ -45,6 +46,7 @@ class Builder extends QueryBuilder
      * Get the count of the total records for the paginator.
      *
      * @param array $columns
+     *
      * @return int
      */
     public function getCountForPagination($columns = ['*'])
@@ -56,7 +58,7 @@ class Builder extends QueryBuilder
          * take into account what type of query it was. When there is a group by we will
          * just return the count of the entire results set since that will be correct.
          */
-        if (! isset($results[0])) {
+        if (!isset($results[0])) {
             return 0;
         } elseif (is_object($results[0])) {
             return (int) (property_exists($results[0], 'AGGREGATE') ? $results[0]->AGGREGATE : $results[0]->aggregate);
@@ -68,9 +70,10 @@ class Builder extends QueryBuilder
     /**
      * Insert a new record and get the value of the primary key.
      *
-     * @param array $values
-     * @param array $binaries
+     * @param array  $values
+     * @param array  $binaries
      * @param string $sequence
+     *
      * @return int
      */
     public function insertLob(array $values, array $binaries, $sequence = 'id')
@@ -87,9 +90,10 @@ class Builder extends QueryBuilder
     /**
      * Update a new record with blob field.
      *
-     * @param array $values
-     * @param array $binaries
+     * @param array  $values
+     * @param array  $binaries
      * @param string $sequence
+     *
      * @return bool
      */
     public function updateLob(array $values, array $binaries, $sequence = 'id')
@@ -110,9 +114,10 @@ class Builder extends QueryBuilder
      * with up to 1000 expressions to avoid ORA-01795.
      *
      * @param string $column
-     * @param mixed $values
+     * @param mixed  $values
      * @param string $boolean
-     * @param bool $not
+     * @param bool   $not
+     *
      * @return QueryBuilder|IfxBuilder
      */
     public function whereIn($column, $values, $boolean = 'and', $not = false)
@@ -128,7 +133,7 @@ class Builder extends QueryBuilder
 
             return $this->where(function ($query) use ($column, $chunks, $type, $not) {
                 foreach ($chunks as $ch) {
-                    $sqlClause = $not ? 'where' . $type : 'orWhere' . $type;
+                    $sqlClause = $not ? 'where'.$type : 'orWhere'.$type;
                     $query->{$sqlClause}($column, $ch);
                 }
             }, null, null, $boolean);
@@ -146,20 +151,21 @@ class Builder extends QueryBuilder
     {
         if ($this->lock) {
             $this->connection->beginTransaction();
-            $result = $this->connection->select($this->toSql(), $this->getBindings(), ! $this->useWritePdo);
+            $result = $this->connection->select($this->toSql(), $this->getBindings(), !$this->useWritePdo);
             $this->connection->commit();
 
             return $result;
         }
 
-        return $this->connection->select($this->toSql(), $this->getBindings(), ! $this->useWritePdo);
+        return $this->connection->select($this->toSql(), $this->getBindings(), !$this->useWritePdo);
     }
 
     /**
      * Set the table which the query is targeting.
      *
      * @param Closure|QueryBuilder|string $table
-     * @param string|null  $as
+     * @param string|null                 $as
+     *
      * @return $this
      */
     public function from($table, $as = null)
@@ -177,10 +183,11 @@ class Builder extends QueryBuilder
      * Makes "from" fetch from a sub query.
      *
      * @param Closure|QueryBuilder|string $query
-     * @param string  $as
-     * @return QueryBuilder|static
+     * @param string                      $as
      *
      * @throws InvalidArgumentException
+     *
+     * @return QueryBuilder|static
      */
     public function fromSub($query, $as)
     {
@@ -193,15 +200,16 @@ class Builder extends QueryBuilder
      * Add a sub query join clause to the query.
      *
      * @param Closure|QueryBuilder|string $query
-     * @param string  $as
-     * @param Closure|string $first
-     * @param string|null $operator
-     * @param string|null $second
-     * @param string $type
-     * @param bool $where
-     * @return QueryBuilder|static
+     * @param string                      $as
+     * @param Closure|string              $first
+     * @param string|null                 $operator
+     * @param string|null                 $second
+     * @param string                      $type
+     * @param bool                        $where
      *
      * @throws \InvalidArgumentException
+     *
+     * @return QueryBuilder|static
      */
     public function joinSub($query, $as, $first, $operator = null, $second = null, $type = 'inner', $where = false)
     {
@@ -215,8 +223,9 @@ class Builder extends QueryBuilder
     /**
      * Add a sub query cross join to the query.
      *
-     * @param Closure|QueryBuilder|string  $query
-     * @param string $as
+     * @param Closure|QueryBuilder|string $query
+     * @param string                      $as
+     *
      * @return $this
      */
     public function crossJoinSub($query, $as)

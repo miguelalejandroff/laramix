@@ -397,8 +397,9 @@ class Grammar extends SchemaGrammar
      */
     protected function wrapValue($value)
     {
-        if ($this->isReserved($value))
+        if ($this->isReserved($value)) {
             return Str::upper(parent::wrapValue($value));
+        }
 
         if ($value === '*') {
             return $value;

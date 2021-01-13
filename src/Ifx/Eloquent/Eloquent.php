@@ -3,8 +3,8 @@
 namespace Archytech\Laravel\Ifx\Eloquent;
 
 use Archytech\Laravel\Ifx\Connection;
-use Archytech\Laravel\Ifx\Query\Grammars\Grammar;
 use Archytech\Laravel\Ifx\Query\Builder as QueryBuilder;
+use Archytech\Laravel\Ifx\Query\Grammars\Grammar;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as IlluminateQueryBuilder;
@@ -35,12 +35,13 @@ class Eloquent extends Model
     /**
      * Get next value of the model sequence.
      *
-     * @param  null|string $sequence
+     * @param null|string $sequence
+     *
      * @return int
      */
     public static function nextValue($sequence = null)
     {
-        $instance = new static;
+        $instance = new static();
         $sequence = $sequence ?? $instance->getSequenceName();
 
         return $instance->getConnection()
@@ -55,16 +56,18 @@ class Eloquent extends Model
      */
     public function getSequenceName()
     {
-        if ($this->sequence)
+        if ($this->sequence) {
             return $this->sequence;
+        }
 
-        return $this->getTable() . '_' . $this->getKeyName() . '_seq';
+        return $this->getTable().'_'.$this->getKeyName().'_seq';
     }
 
     /**
      * Set sequence name.
      *
      * @param string $name
+     *
      * @return $this
      */
     public function setSequenceName($name)
@@ -77,13 +80,14 @@ class Eloquent extends Model
     /**
      * Update the model in the database.
      *
-     * @param  array $attributes
-     * @param  array $options
+     * @param array $attributes
+     * @param array $options
+     *
      * @return bool|int
      */
     public function update(array $attributes = [], array $options = [])
     {
-        if (! $this->exists) {
+        if (!$this->exists) {
             return false;
         }
 
@@ -97,7 +101,8 @@ class Eloquent extends Model
     /**
      * Extract binary fields from given attributes.
      *
-     * @param  array $attributes
+     * @param array $attributes
+     *
      * @return array
      */
     protected function extractBinaries(&$attributes)
@@ -118,7 +123,8 @@ class Eloquent extends Model
     /**
      * Check if attributes contains binary field.
      *
-     * @param  array $attributes
+     * @param array $attributes
+     *
      * @return bool
      */
     protected function checkBinary(array $attributes)
@@ -142,13 +148,13 @@ class Eloquent extends Model
         $pos = strpos($this->getTable(), '@');
 
         if ($pos === false) {
-            return $this->getTable() . '.' . $this->getKeyName();
+            return $this->getTable().'.'.$this->getKeyName();
         }
 
-        $table  = substr($this->getTable(), 0, $pos);
+        $table = substr($this->getTable(), 0, $pos);
         $dbLink = substr($this->getTable(), $pos);
 
-        return $table . '.' . $this->getKeyName() . $dbLink;
+        return $table.'.'.$this->getKeyName().$dbLink;
     }
 
     /**
@@ -158,7 +164,7 @@ class Eloquent extends Model
      */
     protected function newBaseQueryBuilder()
     {
-        $conn    = $this->getConnection();
+        $conn = $this->getConnection();
         $grammar = $conn->getQueryGrammar();
 
         if ($grammar instanceof Grammar) {
@@ -171,7 +177,8 @@ class Eloquent extends Model
     /**
      * Perform a model update operation.
      *
-     * @param  Builder $query
+     * @param Builder $query
+     *
      * @return bool
      */
     protected function performUpdate(Builder $query)
@@ -214,7 +221,7 @@ class Eloquent extends Model
      * Update model with binary (blob) fields.
      *
      * @param Builder $query
-     * @param array $dirty
+     * @param array   $dirty
      */
     protected function updateBinary(Builder $query, $dirty)
     {
@@ -230,7 +237,8 @@ class Eloquent extends Model
     /**
      * Perform a model insert operation.
      *
-     * @param  Builder $query
+     * @param Builder $query
+     *
      * @return bool
      */
     protected function performInsert(Builder $query)
@@ -293,8 +301,9 @@ class Eloquent extends Model
     /**
      * Insert the given attributes and set the ID on the model.
      *
-     * @param  Builder $query
-     * @param  array $attributes
+     * @param Builder $query
+     * @param array   $attributes
+     *
      * @return int|void
      */
     protected function insertAndSetId(Builder $query, $attributes)

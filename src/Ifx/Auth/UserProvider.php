@@ -11,7 +11,8 @@ class UserProvider extends EloquentUserProvider
     /**
      * Retrieve a user by the given credentials.
      *
-     * @param  array $statement
+     * @param array $statement
+     *
      * @return Authenticatable|null
      */
     public function retrieveByCredentials(array $statement)
