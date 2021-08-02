@@ -1,6 +1,6 @@
 <?php
 
-namespace Archytech\Laravel\Ifx\Query\Processors;
+namespace Miguelalejandroff\Laravel\Ifx\Query\Processors;
 
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Processors\Processor as QueryProcessor;
