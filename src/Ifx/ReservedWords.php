@@ -1,6 +1,6 @@
 <?php
 
-namespace Archytech\Laravel\Ifx;
+namespace Miguelalejandroff\Laravel\Ifx;
 
 use Illuminate\Support\Str;
 
