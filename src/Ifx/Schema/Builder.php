@@ -1,6 +1,6 @@
 <?php
 
-namespace Archytech\Laravel\Ifx\Schema;
+namespace Miguelalejandroff\Laravel\Ifx\Schema;
 
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
 
