@@ -36,18 +36,18 @@
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "miguelalejandro\\Laravel\\Ifx\\": "src/Ifx/"
+            "Miguelalejandro\\Laravel\\Ifx\\": "src/Ifx/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "miguelalejandro\\Laravel\\Tests\\": "tests/"
+            "Miguelalejandro\\Laravel\\Tests\\": "tests/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "miguelalejandro\\Laravel\\Ifx\\InformixServiceProvider"
+                "Miguelalejandro\\Laravel\\Ifx\\InformixServiceProvider"
             ]
         }
     }
