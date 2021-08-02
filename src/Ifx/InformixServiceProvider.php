@@ -1,8 +1,8 @@
 <?php
 
-namespace Archytech\Laravel\Ifx;
+namespace Miguelalejandroff\Laravel\Ifx;
 
-use Archytech\Laravel\Ifx\Connectors\Connector;
+use Miguelalejandroff\Laravel\Ifx\Connectors\Connector;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 
