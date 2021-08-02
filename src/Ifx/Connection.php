@@ -1,11 +1,11 @@
 <?php
 
-namespace Archytech\Laravel\Ifx;
+namespace Miguelalejandroff\Laravel\Ifx;
 
-use Archytech\Laravel\Ifx\Query\Grammars\Grammar as QueryGrammar;
-use Archytech\Laravel\Ifx\Query\Processors\Processor as QueryProcessor;
-use Archytech\Laravel\Ifx\Schema\Builder as SchemaBuilder;
-use Archytech\Laravel\Ifx\Schema\Grammars\Grammar as SchemaGrammar;
+use Miguelalejandroff\Laravel\Ifx\Query\Grammars\Grammar as QueryGrammar;
+use Miguelalejandroff\Laravel\Ifx\Query\Processors\Processor as QueryProcessor;
+use Miguelalejandroff\Laravel\Ifx\Schema\Builder as SchemaBuilder;
+use Miguelalejandroff\Laravel\Ifx\Schema\Grammars\Grammar as SchemaGrammar;
 use DateTimeInterface;
 use Illuminate\Database\Connection as BaseConnection;
 use Illuminate\Database\Eloquent\Model;
