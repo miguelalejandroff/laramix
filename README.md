@@ -5,12 +5,12 @@
 ## Requirements
 
 - php: `^7.2`
-- laravel/framework: `^6.0|^7.0`
-- guzzlehttp/guzzle: `^6.0|^7.0`
-- illuminate/support: `^6.0|^7.0`
-- illuminate/database: `^6.0|^7.0`
-- illuminate/pagination: `^6.0|^7.0`
-- illuminate/encryption: `^6.0|^7.0`
+- laravel/framework: `^6.0|^8.0`
+- guzzlehttp/guzzle: `^6.0|^8.0`
+- illuminate/support: `^6.0|^8.0`
+- illuminate/database: `^6.0|^8.0`
+- illuminate/pagination: `^6.0|^8.0`
+- illuminate/encryption: `^6.0|^8.0`
 
 ## Installation
 
