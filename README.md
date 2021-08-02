@@ -27,14 +27,14 @@ Once Composer has installed or updated, you need to register Informix Driver. Op
     /*
      * Package Service Providers ...
      */
-    miguelalejandro\Laravel\Ifx\InformixServiceProvider::class,
+    Miguelalejandro\Laravel\Ifx\InformixServiceProvider::class,
 ]
 ```
 
 Finally you need to publish a configuration file by running the following artisan command.
 
 ```bash
-php artisan vendor:publish --provider="miguelalejandro\Laravel\Ifx\InformixServiceProvider"
+php artisan vendor:publish --provider="Miguelalejandro\Laravel\Ifx\InformixServiceProvider"
 ```
 
 This will copy the configuration file to `config/informix.php`
