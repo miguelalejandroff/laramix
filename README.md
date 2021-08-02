@@ -17,7 +17,7 @@
 Require this package in the `composer.json` of your laravel project. This will download the requirements package:
 
 ```bash
-composer require archytech/laramix
+composer require miguelalejandroff/laramix
 ```
 
 Once Composer has installed or updated, you need to register Informix Driver. Open up `config/app.php` and find the `providers` key and add:
