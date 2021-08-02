@@ -1,6 +1,6 @@
 <?php
 
-namespace Archytech\Laravel\Ifx\Connectors;
+namespace Miguelalejandroff\Laravel\Ifx\Connectors;
 
 use Exception;
 use Illuminate\Contracts\Encryption\Encrypter;
