@@ -1,6 +1,6 @@
 <?php
 
-namespace Archytech\Laravel\Ifx\Schema\Grammars;
+namespace Miguelalejandroff\Laravel\Ifx\Schema\Grammars;
 
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Expression;
