@@ -1,6 +1,6 @@
 <?php
 
-namespace Archytech\Laravel\Ifx\Query\Grammars;
+namespace Miguelalejandroff\Laravel\Ifx\Query\Grammars;
 
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Grammars\Grammar as QueryGrammar;
