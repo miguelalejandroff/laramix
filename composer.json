@@ -15,7 +15,7 @@
         {
             "name": "Arief BP",
             "email": "ariefbp27@gmail.com",
-            "homepage": "https://github.com/archytech99/laramix"
+            "homepage": "https://github.com/miguelalejandro/laramix"
         }
     ],
     "require": {
@@ -36,18 +36,18 @@
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "Archytech\\Laravel\\Ifx\\": "src/Ifx/"
+            "miguelalejandro\\Laravel\\Ifx\\": "src/Ifx/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Archytech\\Laravel\\Tests\\": "tests/"
+            "miguelalejandro\\Laravel\\Tests\\": "tests/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Archytech\\Laravel\\Ifx\\InformixServiceProvider"
+                "miguelalejandro\\Laravel\\Ifx\\InformixServiceProvider"
             ]
         }
     }
